@@ -4,7 +4,8 @@ const bodyParser = require("body-parser");
 const mongoose = require("mongoose");
 
 // importing routes to the server
-const cffRoutes = require("./routes/router");
+const cffRoutes = require("./routes/cff-routes");
+const userRoutes = require("./routes/users-routes");
 
 // switching off strictQuery for the future
 mongoose.set("strictQuery", false);
@@ -18,9 +19,7 @@ app.use(
     extended: true,
   })
 );
-
-// routes
-app.use("/api/cff", cffRoutes);
+app.use(bodyParser.json({ limit: "50mb" }));
 
 // For CORS
 app.use((req, res, next) => {
@@ -33,16 +32,20 @@ app.use((req, res, next) => {
   next();
 });
 
-//connecting to mongoDB
-// mongoose
-//   .connect(
-//     "mongodb+srv://FieldOfHonor1:Cookie1234@cluster0.7cfzpvb.mongodb.net/?retryWrites=true&w=majority"
-//   )
-//   .then(() => {
-//     app.listen(3001, () => {
-//       console.log("Server Started on port 3001.");
-//     });
-//   })
-//   .catch((error) => {
-//     console.log(error);
-//   });
+// routes
+app.use("/api/cff", cffRoutes);
+app.use("/api/users", userRoutes);
+
+// connecting to mongoDB
+mongoose
+  .connect(
+    "mongodb+srv://FieldofHonor:oBOfvWF7zwe8KkLa@cluster0.9paepmq.mongodb.net/Fieldofhonor?retryWrites=true&w=majority"
+  )
+  .then(() => {
+    app.listen(8000, () => {
+      console.log("Server Started on port 8000.");
+    });
+  })
+  .catch((error) => {
+    console.log(error);
+  });
